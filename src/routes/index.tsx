@@ -17,37 +17,29 @@ export const Route = createFileRoute("/")({
 });
 
 type ModalKind = "login" | "register" | "forgot" | "topup" | "withdraw" | "history" | "leaderboard" | "terms" | "privacy" | "responsible" | "support" | null;
-const samplePlayers = [
-  { name: "ViperX", kills: 42, score: "12.8k", wins: 18 },
-  { name: "NoodleKing", kills: 38, score: "11.2k", wins: 15 },
-  { name: "Orbit", kills: 31, score: "9.6k", wins: 12 },
-  { name: "fang.exe", kills: 27, score: "8.4k", wins: 10 },
-  { name: "Slyther", kills: 23, score: "7.1k", wins: 8 },
-];
-
 function Header({ open }: { open: (modal: ModalKind) => void }) {
   return <>
     <header className="site-header"><div className="header-inner">
       <a href="#home" className="brand" aria-label="Coil home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>coil<span className="brand-dot">.</span></span></a>
       <nav className="main-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a><a href="#how-to-play">How to Play</a></nav>
-      <div className="header-actions"><span className="online-pill"><span className="status-dot" /> Players online: unavailable</span><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></div>
+      <div className="header-actions"><span className="online-pill"><span className="status-dot" /> Available players: not yet live</span><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></div>
     </div></header>
-    <nav className="mobile-nav" aria-label="Mobile navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a><a href="#how-to-play">How to Play</a></nav>
+    <nav className="mobile-nav" aria-label="Mobile navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a><a href="#how-to-play">How to Play</a><span className="mobile-availability">Players: not yet live</span></nav>
   </>;
 }
 
 function Leaderboard({ open }: { open: (modal: ModalKind) => void }) {
   return <div className="panel leader-panel" id="leaderboard">
-    <div className="panel-heading"><h2><Trophy size={17} /> Leaderboard</h2><span className="tag">Demo data</span></div>
+    <div className="panel-heading"><h2><Trophy size={17} /> Leaderboard</h2></div>
     <div className="score-head"><span>#</span><span>Player</span><span>Kills</span><span>Best</span><span>Wins</span></div>
-    {samplePlayers.map((player, index) => <div className="score-row" key={player.name}><span className="rank">{String(index + 1).padStart(2, "0")}</span><span className="player">{player.name}</span><span>{player.kills}</span><span>{player.score}</span><span>{player.wins}</span></div>)}
+    <div className="leader-empty">No players ranked yet.<span>Results will appear when matches begin.</span></div>
     <button className="panel-link" onClick={() => open("leaderboard")}>View full leaderboard <ArrowRight size={13} /></button>
   </div>;
 }
 
 function WalletPanel({ open }: { open: (modal: ModalKind) => void }) {
   return <div className="panel wallet-panel">
-    <div className="panel-heading"><h2><Wallet size={17} /> Wallet</h2><span className="tag">Demo only</span></div>
+    <div className="panel-heading"><h2><Wallet size={17} /> Wallet</h2></div>
     <div className="wallet-balance-label">Available balance</div><div className="wallet-balance">0.00</div><div className="wallet-note">Virtual credits · No monetary value</div>
     <div className="wallet-stats"><div><span>Total deposits</span><strong>0.00</strong></div><div><span>Total withdrawals</span><strong>0.00</strong></div></div>
     <div className="wallet-actions"><Button variant="primary" size="small" onClick={() => open("topup")}><Coins size={14} /> Top up</Button><Button variant="outline" size="small" onClick={() => open("withdraw")}>Withdraw</Button></div>
@@ -59,7 +51,7 @@ function Hero({ open }: { open: (modal: ModalKind) => void }) {
   return <section className="arena" id="home" aria-label="Coil arena">
     <img className="arena-art" src={arenaArt} alt="Colorful snakes weaving through a dark arena filled with glowing orbs" width={1600} height={900} />
     <div className="arena-inner"><div className="arena-intro"><span className="eyebrow"><span className="status-dot" /> The next competitive snake arena</span><h1>ENTER THE ARENA.</h1><p>Grow bigger. Outplay your rivals. Dominate the leaderboard.</p></div>
-      <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to coil?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="play-availability"><span className="status-dot" /> Game coming soon</div></div><WalletPanel open={open} /></div>
+      <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to coil?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="play-availability"><span className="status-dot" /> Available players: not yet live · Game coming soon</div></div><WalletPanel open={open} /></div>
     </div>
   </section>;
 }
@@ -92,7 +84,7 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [close]);
 
-  const titles: Record<Exclude<ModalKind, null>, string> = { login: "Welcome back", register: "Create an account", forgot: "Reset password", topup: "Top up demo credits", withdraw: "Withdrawals", history: "Transaction history", leaderboard: "Leaderboard", terms: "Terms of Service", privacy: "Privacy Policy", responsible: "Responsible Play", support: "Support" };
+  const titles: Record<Exclude<ModalKind, null>, string> = { login: "Welcome back", register: "Create an account", forgot: "Reset password", topup: "Top up virtual credits", withdraw: "Withdrawals", history: "Transaction history", leaderboard: "Leaderboard", terms: "Terms of Service", privacy: "Privacy Policy", responsible: "Responsible Play", support: "Support" };
   const submitAuth = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -111,10 +103,10 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
       {message && <p role="status" className="form-message">{message}</p>}
       <Button variant="primary" className="modal-submit" type="submit">{kind === "register" ? "Create account" : kind === "forgot" ? "Request reset" : "Log in"} <ArrowRight size={15} /></Button>
     </form><p className="modal-switch">{kind === "login" ? "New to the arena?" : "Already have an account?"} <button className="text-action" onClick={() => switchTo(kind === "login" ? "register" : "login")}>{kind === "login" ? "Register" : "Log in"}</button></p></>}
-    {kind === "topup" && <><p className="modal-copy">Choose a demo amount. Virtual credits have no monetary value and cannot be withdrawn as real money.</p><div className="amount-options">{[10, 25, 50].map(value => <Button key={value} variant="outline" className={amount === String(value) ? "selected" : ""} onClick={() => setAmount(String(value))}>{value} credits</Button>)}</div><label className="field"><span>Custom amount</span><input type="number" min="1" max="1000" value={amount} onChange={event => setAmount(event.target.value)} /></label><div className="notice-box"><strong>Demo only.</strong> No payments will be collected, and no balance will change in this preview.</div>{message && <p role="status" className="form-message">{message}</p>}<Button variant="primary" className="modal-submit" disabled={!amount || Number(amount) <= 0 || Number(amount) > 1000} onClick={() => setMessage("Demo top-ups will be available when accounts launch. Your balance remains 0.00.")}>Confirm demo top-up</Button></>}
-    {kind === "withdraw" && <><div className="notice-box"><strong>Real-money withdrawals are not enabled.</strong> The wallet displays virtual demo credits with no monetary value. No withdrawal can be requested or completed in this version.</div><Button variant="secondary" className="modal-submit" onClick={close}>Got it</Button></>}
-    {kind === "history" && <><p className="modal-copy">No transactions yet. Demo credits cannot be purchased or withdrawn in this preview.</p><div className="notice-box"><History size={18} /> Your history will appear here when account wallets become available.</div></>}
-    {kind === "leaderboard" && <><p className="modal-copy">Example rankings only. Live match results are not available yet.</p><div className="score-head"><span>#</span><span>Player</span><span>Kills</span><span>Best</span><span>Wins</span></div>{samplePlayers.map((player, index) => <div className="score-row" key={player.name}><span className="rank">{String(index + 1).padStart(2, "0")}</span><span className="player">{player.name}</span><span>{player.kills}</span><span>{player.score}</span><span>{player.wins}</span></div>)}</>}
+    {kind === "topup" && <><p className="modal-copy">Choose an amount. Virtual credits have no monetary value and cannot be withdrawn as real money.</p><div className="amount-options">{[10, 25, 50].map(value => <Button key={value} variant="outline" className={amount === String(value) ? "selected" : ""} onClick={() => setAmount(String(value))}>{value} credits</Button>)}</div><label className="field"><span>Custom amount</span><input type="number" min="1" max="1000" value={amount} onChange={event => setAmount(event.target.value)} /></label><div className="notice-box"><strong>Not available yet.</strong> No payments will be collected, and no balance will change.</div>{message && <p role="status" className="form-message">{message}</p>}<Button variant="primary" className="modal-submit" disabled={!amount || Number(amount) <= 0 || Number(amount) > 1000} onClick={() => setMessage("Top-ups will be available when accounts launch. Your balance remains 0.00.")}>Confirm top-up</Button></>}
+    {kind === "withdraw" && <><div className="notice-box"><strong>Real-money withdrawals are not enabled.</strong> The wallet displays virtual credits with no monetary value. No withdrawal can be requested or completed in this version.</div><Button variant="secondary" className="modal-submit" onClick={close}>Got it</Button></>}
+    {kind === "history" && <><p className="modal-copy">No transactions yet. Virtual credits cannot be purchased or withdrawn at this time.</p><div className="notice-box"><History size={18} /> Your history will appear here when account wallets become available.</div></>}
+    {kind === "leaderboard" && <><p className="modal-copy">No players ranked yet. Results will appear when matches begin.</p><div className="score-head"><span>#</span><span>Player</span><span>Kills</span><span>Best</span><span>Wins</span></div><div className="leader-empty">No match results available.</div></>}
     {kind === "terms" && <p className="modal-copy">The game is not yet available. Official terms of service will be provided before account creation or gameplay opens.</p>}
     {kind === "privacy" && <p className="modal-copy">This preview does not create accounts or submit your form entries. An official privacy policy will be available before launch.</p>}
     {kind === "responsible" && <><div className="notice-box"><ShieldCheck size={18} /> This preview uses virtual credits only. They have no cash value and cannot be redeemed for money.</div><p className="modal-copy">Take breaks and play within your limits. Real-money features are not part of this version.</p></>}
