@@ -1,4 +1,5 @@
 - [x] Build the responsive competitive snake landing page based on the uploaded reference.
-- [x] Add clearly labeled demo wallet and leaderboard with working preview dialogs.
+- [x] Show a virtual wallet and an empty leaderboard without invented player activity.
 - [x] Add account-preview dialogs, how-to-play content, and footer links.
-- [ ] Connect secure accounts, persistent wallet records, live player counts, and gameplay. Blocked: this phase requests landing-page UI only; no gameplay or persistent service has been commissioned.
+- [x] Show available-player status without inventing a count.
+- [ ] Connect secure accounts, persistent wallet records, live available-player counts, and gameplay. Blocked: there is no live player service or gameplay to count yet.
