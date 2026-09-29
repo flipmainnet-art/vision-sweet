@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, BarChart3, Check, ChevronRight, CircleHelp, Coins, Crosshair, History, LockKeyhole, Play, ShieldCheck, Swords, Trophy, Wallet, X, Zap } from "lucide-react";
+import { ArrowRight, BarChart3, ChevronRight, Coins, Crosshair, History, Play, ShieldCheck, Swords, Trophy, Wallet, X, Zap } from "lucide-react";
 import { Button } from "../components/Button";
 import arenaArt from "../assets/arena.jpg";
 
