@@ -127,7 +127,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .play-panel p { color: var(--muted-foreground); font-size: 13px; margin: 0 0 22px; }
 .play-panel .ui-button { width: 100%; }
 .play-availability { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 15px; color: var(--muted-foreground); font: 11px var(--font-mono); }
-.play-availability .status-dot { background: var(--gold); box-shadow: 0 0 10px var(--gold); width: 6px; height: 6px; }
+.play-availability .status-dot { background: var(--muted-foreground); box-shadow: none; width: 6px; height: 6px; }
 .wallet-balance-label { font: 10px var(--font-mono); color: var(--muted-foreground); text-transform: uppercase; }
 .wallet-balance { font: 600 34px var(--font-mono); margin: 5px 0 2px; color: var(--primary); }
 .wallet-note { color: var(--muted-foreground); font-size: 10px; }

@@ -1,7 +1,8 @@
 - [x] Build the responsive competitive snake landing page based on the uploaded reference.
-- [x] Show a virtual wallet and an empty leaderboard without invented player activity.
-- [x] Add account-preview dialogs, how-to-play content, and footer links.
+- [x] Show a virtual wallet and a clearly illustrative player lineup without invented match results.
+- [x] Add account-preview dialogs and footer links; remove the How to Play section and navigation.
 - [x] Show available-player status without inventing a count.
 - [x] Display zero-dollar preview balances and reveal the supplied Solana address after a three-second loading state, with a clear warning that transfers cannot be credited.
 - [x] Add subtle arena movement without distracting from the landing page or moving controls.
+- [x] Keep the arena presentation polished without suggesting unavailable counts or matches are live.
 - [ ] Connect secure accounts, persistent wallet records, live available-player counts, and gameplay. Blocked: there is no live player service or gameplay to count yet.
