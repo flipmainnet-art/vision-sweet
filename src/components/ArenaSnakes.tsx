@@ -44,17 +44,17 @@ export function ArenaSnakes() {
         if (s.x < -m) s.x = w + m; if (s.x > w + m) s.x = -m;
         if (s.y < -m) s.y = h + m; if (s.y > h + m) s.y = -m;
         s.trail.unshift({ x: s.x, y: s.y });
-        if (s.trail.length > 70) s.trail.pop();
+        if (s.trail.length > 110) s.trail.pop();
         for (let i = s.trail.length - 1; i >= 0; i -= 3) {
           const p = s.trail[i];
           if (i > 0 && Math.abs(p.x - s.trail[i - 1].x) > 50) continue;
           ctx.globalAlpha = 0.55 * (1 - i / s.trail.length) + 0.15;
           ctx.fillStyle = s.color;
-          ctx.beginPath(); ctx.arc(p.x, p.y, 7 - (i / s.trail.length) * 3, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(p.x, p.y, 10 - (i / s.trail.length) * 4, 0, Math.PI * 2); ctx.fill();
         }
         ctx.globalAlpha = 1;
         ctx.shadowColor = s.color; ctx.shadowBlur = 12;
-        ctx.beginPath(); ctx.arc(s.x, s.y, 7.5, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(s.x, s.y, 11, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0;
       }
       if (!reduce) frame = requestAnimationFrame(draw);
