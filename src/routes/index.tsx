@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, BarChart3, ChevronRight, Coins, Crosshair, History, Play, ShieldCheck, Swords, Trophy, Wallet, X, Zap } from "lucide-react";
+import { ArrowRight, BarChart3, Check, ChevronRight, Coins, Copy, Crosshair, History, Play, ShieldCheck, Swords, Trophy, Wallet, X, Zap } from "lucide-react";
 import { Button } from "../components/Button";
 import arenaArt from "../assets/arena.jpg";
 
@@ -17,6 +17,7 @@ export const Route = createFileRoute("/")({
 });
 
 type ModalKind = "login" | "register" | "forgot" | "topup" | "withdraw" | "history" | "leaderboard" | "terms" | "privacy" | "responsible" | "support" | null;
+const TOPUP_ADDRESS = "DPzKJPjWWjLgd5EvuRev4qtvsMPT3ei3shdwyDSJDB1T";
 function Header({ open }: { open: (modal: ModalKind) => void }) {
   return <>
     <header className="site-header"><div className="header-inner">
@@ -40,8 +41,8 @@ function Leaderboard({ open }: { open: (modal: ModalKind) => void }) {
 function WalletPanel({ open }: { open: (modal: ModalKind) => void }) {
   return <div className="panel wallet-panel">
     <div className="panel-heading"><h2><Wallet size={17} /> Wallet</h2></div>
-    <div className="wallet-balance-label">Available balance</div><div className="wallet-balance">0.00</div><div className="wallet-note">Virtual credits · No monetary value</div>
-    <div className="wallet-stats"><div><span>Total deposits</span><strong>0.00</strong></div><div><span>Total withdrawals</span><strong>0.00</strong></div></div>
+    <div className="wallet-balance-label">Available balance</div><div className="wallet-balance">$0.00</div><div className="wallet-note">Preview balance · Not connected to deposits</div>
+    <div className="wallet-stats"><div><span>Total deposits</span><strong>$0.00</strong></div><div><span>Total withdrawals</span><strong>$0.00</strong></div></div>
     <div className="wallet-actions"><Button variant="primary" size="small" onClick={() => open("topup")}><Coins size={14} /> Top up</Button><Button variant="outline" size="small" onClick={() => open("withdraw")}>Withdraw</Button></div>
     <button className="panel-link" onClick={() => open("history")}>Transaction history <ChevronRight size={13} /></button>
   </div>;
@@ -75,8 +76,13 @@ function Footer({ open }: { open: (modal: ModalKind) => void }) {
 
 function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; close: () => void; switchTo: (kind: ModalKind) => void }) {
   const [message, setMessage] = useState("");
-  const [amount, setAmount] = useState("10");
-  useEffect(() => { setMessage(""); }, [kind]);
+  const [addressState, setAddressState] = useState<"idle" | "loading" | "ready">("idle");
+  useEffect(() => { setMessage(""); setAddressState("idle"); }, [kind]);
+  useEffect(() => {
+    if (kind !== "topup" || addressState !== "loading") return;
+    const timer = window.setTimeout(() => setAddressState("ready"), 3000);
+    return () => window.clearTimeout(timer);
+  }, [kind, addressState]);
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") close(); };
     window.addEventListener("keydown", onKey);
@@ -84,7 +90,7 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
     return () => { window.removeEventListener("keydown", onKey); document.body.style.overflow = ""; };
   }, [close]);
 
-  const titles: Record<Exclude<ModalKind, null>, string> = { login: "Welcome back", register: "Create an account", forgot: "Reset password", topup: "Top up virtual credits", withdraw: "Withdrawals", history: "Transaction history", leaderboard: "Leaderboard", terms: "Terms of Service", privacy: "Privacy Policy", responsible: "Responsible Play", support: "Support" };
+  const titles: Record<Exclude<ModalKind, null>, string> = { login: "Welcome back", register: "Create an account", forgot: "Reset password", topup: "Top up", withdraw: "Withdrawals", history: "Transaction history", leaderboard: "Leaderboard", terms: "Terms of Service", privacy: "Privacy Policy", responsible: "Responsible Play", support: "Support" };
   const submitAuth = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -103,9 +109,9 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
       {message && <p role="status" className="form-message">{message}</p>}
       <Button variant="primary" className="modal-submit" type="submit">{kind === "register" ? "Create account" : kind === "forgot" ? "Request reset" : "Log in"} <ArrowRight size={15} /></Button>
     </form><p className="modal-switch">{kind === "login" ? "New to the arena?" : "Already have an account?"} <button className="text-action" onClick={() => switchTo(kind === "login" ? "register" : "login")}>{kind === "login" ? "Register" : "Log in"}</button></p></>}
-    {kind === "topup" && <><p className="modal-copy">Choose an amount. Virtual credits have no monetary value and cannot be withdrawn as real money.</p><div className="amount-options">{[10, 25, 50].map(value => <Button key={value} variant="outline" className={amount === String(value) ? "selected" : ""} onClick={() => setAmount(String(value))}>{value} credits</Button>)}</div><label className="field"><span>Custom amount</span><input type="number" min="1" max="1000" value={amount} onChange={event => setAmount(event.target.value)} /></label><div className="notice-box"><strong>Not available yet.</strong> No payments will be collected, and no balance will change.</div>{message && <p role="status" className="form-message">{message}</p>}<Button variant="primary" className="modal-submit" disabled={!amount || Number(amount) <= 0 || Number(amount) > 1000} onClick={() => setMessage("Top-ups will be available when accounts launch. Your balance remains 0.00.")}>Confirm top-up</Button></>}
-    {kind === "withdraw" && <><div className="notice-box"><strong>Real-money withdrawals are not enabled.</strong> The wallet displays virtual credits with no monetary value. No withdrawal can be requested or completed in this version.</div><Button variant="secondary" className="modal-submit" onClick={close}>Got it</Button></>}
-    {kind === "history" && <><p className="modal-copy">No transactions yet. Virtual credits cannot be purchased or withdrawn at this time.</p><div className="notice-box"><History size={18} /> Your history will appear here when account wallets become available.</div></>}
+    {kind === "topup" && <><p className="modal-copy">View the provided Solana wallet address.</p><div className="notice-box"><strong>Solana network only: SOL or USDC on Solana.</strong> Do not send funds yet. This preview cannot verify transfers, credit your balance, or process refunds. The address shown is provided for this page, not a unique wallet generated for your account.</div>{addressState === "idle" && <Button variant="primary" className="modal-submit" onClick={() => setAddressState("loading")}>Generate wallet address</Button>}{addressState === "loading" && <div className="address-loading" role="status"><span className="address-spinner" aria-hidden="true" /> Loading wallet address…</div>}{addressState === "ready" && <div className="address-result"><span className="address-label">Solana wallet address</span><div className="address-row"><code>{TOPUP_ADDRESS}</code><Button variant="outline" size="icon" aria-label="Copy wallet address" title="Copy wallet address" onClick={async () => { try { await navigator.clipboard.writeText(TOPUP_ADDRESS); setMessage("Address copied."); } catch { setMessage("Could not copy automatically. Please select the address to copy it."); } }}>{message === "Address copied." ? <Check size={16} /> : <Copy size={16} />}</Button></div>{message && <p role="status" className="address-message">{message}</p>}</div>}</>}
+    {kind === "withdraw" && <><div className="notice-box"><strong>Real-money withdrawals are not enabled.</strong> The $0.00 preview balance is not connected to deposits. No withdrawal can be requested or completed in this version.</div><Button variant="secondary" className="modal-submit" onClick={close}>Got it</Button></>}
+    {kind === "history" && <><p className="modal-copy">No transactions yet. This preview cannot track deposits or withdrawals.</p><div className="notice-box"><History size={18} /> Your history will appear here when account wallets become available.</div></>}
     {kind === "leaderboard" && <><p className="modal-copy">No players ranked yet. Results will appear when matches begin.</p><div className="score-head"><span>#</span><span>Player</span><span>Kills</span><span>Best</span><span>Wins</span></div><div className="leader-empty">No match results available.</div></>}
     {kind === "terms" && <p className="modal-copy">The game is not yet available. Official terms of service will be provided before account creation or gameplay opens.</p>}
     {kind === "privacy" && <p className="modal-copy">This preview does not create accounts or submit your form entries. An official privacy policy will be available before launch.</p>}
