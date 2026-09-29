@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
 import { ArrowRight, Check, ChevronRight, Coins, Copy, Crosshair, History, Play, ShieldCheck, Trophy, Wallet, X, Zap } from "lucide-react";
 import { Button } from "../components/Button";
+import { supabase } from "@/integrations/supabase/client";
+import type { User } from "@supabase/supabase-js";
 import arenaArt from "../assets/arena.jpg";
 
 export const Route = createFileRoute("/")({
@@ -25,12 +27,13 @@ const samplePlayers = [
   { name: "neonfang", initials: "NF" },
   { name: "loopback", initials: "LB" },
 ];
-function Header({ open }: { open: (modal: ModalKind) => void }) {
+function Header({ open, user }: { open: (modal: ModalKind) => void; user: User | null }) {
+  const name = (user?.user_metadata?.["username"] as string | undefined) ?? user?.email?.split("@")[0] ?? "";
   return <>
     <header className="site-header"><div className="header-inner">
       <a href="#home" className="brand" aria-label="PumpGames.site home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>Pumpgames<span className="brand-dot">.site</span></span></a>
       <nav className="main-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a></nav>
-      <div className="header-actions"><span className="online-pill" title="Player count is unavailable"><span className="status-dot" /> Players —</span><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></div>
+      <div className="header-actions"><span className="online-pill" title="Player count is unavailable"><span className="status-dot" /> Players —</span>{user ? <><span className="player"><span className="player-avatar">{name.slice(0, 2).toUpperCase()}</span>{name}</span><Button variant="ghost" onClick={() => supabase.auth.signOut()}>Log out</Button></> : <><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></>}</div>
     </div></header>
     <nav className="mobile-nav" aria-label="Mobile navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a><span className="mobile-availability" title="Player count is unavailable">Players —</span></nav>
   </>;
@@ -86,23 +89,38 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
   }, [close]);
 
   const titles: Record<Exclude<ModalKind, null>, string> = { login: "Welcome back", register: "Create an account", forgot: "Reset password", topup: "Top up", withdraw: "Withdrawals", history: "Transaction history", leaderboard: "Leaderboard", terms: "Terms of Service", privacy: "Privacy Policy", responsible: "Responsible Play", support: "Support" };
-  const submitAuth = (event: FormEvent<HTMLFormElement>) => {
+  const [busy, setBusy] = useState(false);
+  const submitAuth = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    if (kind === "register" && data.get("password") !== data.get("confirm")) { setMessage("Passwords do not match. Please try again."); return; }
-    setMessage("Account access is not available yet. No information was saved.");
+    const email = String(data.get("email") ?? "").trim();
+    const password = String(data.get("password") ?? "");
+    if (kind === "forgot") { setMessage("Password reset is coming soon. Please contact support."); return; }
+    if (kind === "register" && password !== data.get("confirm")) { setMessage("Passwords do not match. Please try again."); return; }
+    setBusy(true);
+    try {
+      if (kind === "register") {
+        const { data: res, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin, data: { username: String(data.get("username") ?? "").trim() } } });
+        if (error) { setMessage(error.message); return; }
+        if (res.session) close(); else setMessage("Account created! Check your email to confirm, then log in.");
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) { setMessage(error.message); return; }
+        close();
+      }
+    } finally { setBusy(false); }
   };
 
   return <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div className="modal-top"><div><span className="eyebrow">PUMPGAMES.SITE / {kind === "register" || kind === "login" ? "Account" : kind === "topup" || kind === "withdraw" || kind === "history" ? "Wallet" : "Info"}</span><h2 id="modal-title">{titles[kind]}</h2></div><Button variant="ghost" size="icon" aria-label="Close dialog" onClick={close}><X size={20} /></Button></div>
-    {(kind === "login" || kind === "register" || kind === "forgot") && <><p className="modal-copy">{kind === "forgot" ? "Password recovery will be available when accounts launch." : "Accounts and matchmaking are coming soon. This form is a preview only."}</p><form onSubmit={submitAuth}>
+    {(kind === "login" || kind === "register" || kind === "forgot") && <><p className="modal-copy">{kind === "forgot" ? "Enter your email address." : kind === "login" ? "Log in to your Pumpgames account." : "Create your free Pumpgames account."}</p><form onSubmit={submitAuth}>
       {kind === "register" && <label className="field"><span>Username</span><input name="username" placeholder="Your player name" required minLength={3} autoComplete="username" /></label>}
-      <label className="field"><span>{kind === "login" ? "Email or username" : "Email"}</span><input name="email" type={kind === "login" ? "text" : "email"} placeholder={kind === "login" ? "Email or username" : "you@example.com"} required autoComplete="email" /></label>
+      <label className="field"><span>Email</span><input name="email" type="email" placeholder="you@example.com" required autoComplete="email" /></label>
       {kind !== "forgot" && <label className="field"><span>Password</span><input name="password" type="password" placeholder="At least 8 characters" required minLength={8} autoComplete={kind === "register" ? "new-password" : "current-password"} /></label>}
       {kind === "register" && <label className="field"><span>Confirm password</span><input name="confirm" type="password" placeholder="Repeat your password" required minLength={8} autoComplete="new-password" /></label>}
       {kind === "login" && <div className="form-options"><label className="check-label"><input type="checkbox" /> Remember me</label><button type="button" className="text-action" onClick={() => switchTo("forgot")}>Forgot password?</button></div>}
       {message && <p role="status" className="form-message">{message}</p>}
-      <Button variant="primary" className="modal-submit" type="submit">{kind === "register" ? "Create account" : kind === "forgot" ? "Request reset" : "Log in"} <ArrowRight size={15} /></Button>
+      <Button variant="primary" className="modal-submit" type="submit" disabled={busy}>{busy ? "Please wait…" : kind === "register" ? "Create account" : kind === "forgot" ? "Request reset" : "Log in"} <ArrowRight size={15} /></Button>
     </form><p className="modal-switch">{kind === "login" ? "New to the arena?" : "Already have an account?"} <button className="text-action" onClick={() => switchTo(kind === "login" ? "register" : "login")}>{kind === "login" ? "Register" : "Log in"}</button></p></>}
     {kind === "topup" && <><p className="modal-copy">View the provided Solana wallet address.</p><div className="notice-box"><strong>Solana network only: SOL or USDC on Solana.</strong> Do not send funds yet. This preview cannot verify transfers, credit your balance, or process refunds. The address shown is provided for this page, not a unique wallet generated for your account.</div>{addressState === "idle" && <Button variant="primary" className="modal-submit" onClick={() => setAddressState("loading")}>Generate wallet address</Button>}{addressState === "loading" && <div className="address-loading" role="status"><span className="address-spinner" aria-hidden="true" /> Loading wallet address…</div>}{addressState === "ready" && <div className="address-result"><span className="address-label">Solana wallet address</span><div className="address-row"><code>{TOPUP_ADDRESS}</code><Button variant="outline" size="icon" aria-label="Copy wallet address" title="Copy wallet address" onClick={async () => { try { await navigator.clipboard.writeText(TOPUP_ADDRESS); setMessage("Address copied."); } catch { setMessage("Could not copy automatically. Please select the address to copy it."); } }}>{message === "Address copied." ? <Check size={16} /> : <Copy size={16} />}</Button></div>{message && <p role="status" className="address-message">{message}</p>}</div>}</>}
     {kind === "withdraw" && <><div className="notice-box"><strong>Real-money withdrawals are not enabled.</strong> The $0.00 preview balance is not connected to deposits. No withdrawal can be requested or completed in this version.</div><Button variant="secondary" className="modal-submit" onClick={close}>Got it</Button></>}
@@ -117,5 +135,11 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
 
 function Index() {
   const [modal, setModal] = useState<ModalKind>(null);
-  return <><Header open={setModal} /><main><Hero open={setModal} /></main><Footer open={setModal} />{modal && <Modal kind={modal} close={() => setModal(null)} switchTo={setModal} />}</>;
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null));
+    supabase.auth.getUser().then(({ data: d }) => setUser(d.user ?? null));
+    return () => data.subscription.unsubscribe();
+  }, []);
+  return <><Header open={setModal} user={user} /><main><Hero open={setModal} /></main><Footer open={setModal} />{modal && <Modal kind={modal} close={() => setModal(null)} switchTo={setModal} />}</>;
 }
