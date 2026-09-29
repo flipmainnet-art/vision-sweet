@@ -214,3 +214,10 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   .score-head, .score-row { grid-template-columns: 23px minmax(0,1fr) 48px 54px 39px; font-size: 11px; }
 }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }
+.stake-picker { display: grid; gap: 0.5rem; margin-top: 0.9rem; }
+.stake-label { display: flex; justify-content: space-between; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-muted-foreground); }
+.stake-label em { font-style: normal; color: var(--color-primary); }
+.stake-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.4rem; }
+.stake-option { padding: 0.55rem 0; border-radius: 0.6rem; border: 1px solid var(--color-border); background: transparent; color: var(--color-foreground); font-weight: 600; font-family: var(--font-mono); cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+.stake-option:hover { border-color: var(--color-primary); }
+.stake-option.is-active { background: var(--color-primary); border-color: var(--color-primary); color: var(--color-primary-foreground); }
