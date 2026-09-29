@@ -4,6 +4,7 @@ import { ArrowRight, Check, ChevronRight, Coins, Copy, Crosshair, History, Play,
 import { Button } from "../components/Button";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
+import { ArenaSnakes } from "../components/ArenaSnakes";
 import arenaArt from "../assets/arena.jpg";
 
 export const Route = createFileRoute("/")({
@@ -62,6 +63,7 @@ function Hero({ open }: { open: (modal: ModalKind) => void }) {
   const [stake, setStake] = useState(15);
   return <section className="arena" id="home" aria-label="PumpGames.site arena">
     <img className="arena-art" src={arenaArt} alt="Colorful snakes weaving through a dark arena filled with glowing orbs" width={1600} height={900} />
+    <ArenaSnakes />
     <div className="arena-sparks" aria-hidden="true"><span /><span /><span /><span /><span /></div>
     <div className="arena-inner"><div className="arena-intro"><span className="eyebrow"><span className="status-dot" /> Competitive snake arena</span><h1>ENTER THE ARENA.</h1><p>Grow bigger. Outplay your rivals. Dominate the leaderboard.</p></div>
       <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to play?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="stake-picker" role="group" aria-label="Select funds to play"><span className="stake-label">Select funds to play <em>Min $15</em></span><div className="stake-options">{[15, 25, 50, 100].map((amount) => <button key={amount} type="button" className={"stake-option" + (stake === amount ? " is-active" : "")} aria-pressed={stake === amount} onClick={() => setStake(amount)}>${amount}</button>)}</div></div><div className="play-availability"><span className="status-dot" /> Player count unavailable</div></div><WalletPanel open={open} /></div>
