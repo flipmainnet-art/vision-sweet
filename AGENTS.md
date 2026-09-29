@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+Landing page interaction remains frontend-only until an authenticated persistent service is introduced; this prevents demo UI from presenting invented balances, sessions, or match activity as real.
