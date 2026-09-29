@@ -28,7 +28,7 @@ const samplePlayers = [
   { name: "loopback", initials: "LB" },
 ];
 function Header({ open, user }: { open: (modal: ModalKind) => void; user: User | null }) {
-  const name = (user?.user_metadata?.username as string | undefined) ?? user?.email?.split("@")[0] ?? "";
+  const name = (user?.user_metadata?.["username"] as string | undefined) ?? user?.email?.split("@")[0] ?? "";
   return <>
     <header className="site-header"><div className="header-inner">
       <a href="#home" className="brand" aria-label="PumpGames.site home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>Pumpgames<span className="brand-dot">.site</span></span></a>
