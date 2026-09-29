@@ -6,10 +6,10 @@ import arenaArt from "../assets/arena.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
-    { title: "COIL — Enter the Arena" },
-    { name: "description", content: "Coil is a competitive snake arena. Grow bigger, outplay your rivals, and climb the leaderboard." },
-    { property: "og:title", content: "COIL — Enter the Arena" },
-    { property: "og:description", content: "Grow bigger. Outplay your rivals. Dominate the leaderboard in the Coil arena." },
+    { title: "PumpGames.site — Enter the Arena" },
+    { name: "description", content: "PumpGames.site is a competitive snake arena. Grow bigger, outplay your rivals, and climb the leaderboard." },
+    { property: "og:title", content: "PumpGames.site — Enter the Arena" },
+    { property: "og:description", content: "Grow bigger. Outplay your rivals. Dominate the leaderboard in the PumpGames.site arena." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },
   ] }),
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 type ModalKind = "login" | "register" | "forgot" | "topup" | "withdraw" | "history" | "leaderboard" | "terms" | "privacy" | "responsible" | "support" | null;
 const TOPUP_ADDRESS = "DPzKJPjWWjLgd5EvuRev4qtvsMPT3ei3shdwyDSJDB1T";
 const samplePlayers = [
-  { name: "coilrunner", initials: "CR" },
+  { name: "coinrunner", initials: "CR" },
   { name: "orb_hunter", initials: "OH" },
   { name: "viper.exe", initials: "VE" },
   { name: "neonfang", initials: "NF" },
@@ -28,7 +28,7 @@ const samplePlayers = [
 function Header({ open }: { open: (modal: ModalKind) => void }) {
   return <>
     <header className="site-header"><div className="header-inner">
-      <a href="#home" className="brand" aria-label="Coil home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>coil<span className="brand-dot">.</span></span></a>
+      <a href="#home" className="brand" aria-label="PumpGames.site home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>Pumpgames<span className="brand-dot">.site</span></span></a>
       <nav className="main-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a></nav>
       <div className="header-actions"><span className="online-pill" title="Player count is unavailable"><span className="status-dot" /> Players —</span><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></div>
     </div></header>
@@ -56,17 +56,17 @@ function WalletPanel({ open }: { open: (modal: ModalKind) => void }) {
 }
 
 function Hero({ open }: { open: (modal: ModalKind) => void }) {
-  return <section className="arena" id="home" aria-label="Coil arena">
+  return <section className="arena" id="home" aria-label="PumpGames.site arena">
     <img className="arena-art" src={arenaArt} alt="Colorful snakes weaving through a dark arena filled with glowing orbs" width={1600} height={900} />
     <div className="arena-sparks" aria-hidden="true"><span /><span /><span /><span /><span /></div>
     <div className="arena-inner"><div className="arena-intro"><span className="eyebrow"><span className="status-dot" /> Competitive snake arena</span><h1>ENTER THE ARENA.</h1><p>Grow bigger. Outplay your rivals. Dominate the leaderboard.</p></div>
-      <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to coil?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="play-availability"><span className="status-dot" /> Player count unavailable</div></div><WalletPanel open={open} /></div>
+      <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to play?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="play-availability"><span className="status-dot" /> Player count unavailable</div></div><WalletPanel open={open} /></div>
     </div>
   </section>;
 }
 
 function Footer({ open }: { open: (modal: ModalKind) => void }) {
-  return <footer className="footer"><div className="footer-inner"><p>© {new Date().getFullYear()} COIL. Built for the thrill of the chase.</p><div className="footer-links"><button onClick={() => open("terms")}>Terms of Service</button><button onClick={() => open("privacy")}>Privacy Policy</button><button onClick={() => open("responsible")}>Responsible Play</button><button onClick={() => open("support")}>Support</button></div></div></footer>;
+  return <footer className="footer"><div className="footer-inner"><p>© {new Date().getFullYear()} Pumpgames.site. Built for the thrill of the chase.</p><div className="footer-links"><button onClick={() => open("terms")}>Terms of Service</button><button onClick={() => open("privacy")}>Privacy Policy</button><button onClick={() => open("responsible")}>Responsible Play</button><button onClick={() => open("support")}>Support</button></div></div></footer>;
 }
 
 function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; close: () => void; switchTo: (kind: ModalKind) => void }) {
@@ -94,7 +94,7 @@ function Modal({ kind, close, switchTo }: { kind: Exclude<ModalKind, null>; clos
   };
 
   return <div className="modal-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) close(); }}><section className="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
-    <div className="modal-top"><div><span className="eyebrow">COIL / {kind === "register" || kind === "login" ? "Account" : kind === "topup" || kind === "withdraw" || kind === "history" ? "Wallet" : "Info"}</span><h2 id="modal-title">{titles[kind]}</h2></div><Button variant="ghost" size="icon" aria-label="Close dialog" onClick={close}><X size={20} /></Button></div>
+    <div className="modal-top"><div><span className="eyebrow">PUMPgames.SITE / {kind === "register" || kind === "login" ? "Account" : kind === "topup" || kind === "withdraw" || kind === "history" ? "Wallet" : "Info"}</span><h2 id="modal-title">{titles[kind]}</h2></div><Button variant="ghost" size="icon" aria-label="Close dialog" onClick={close}><X size={20} /></Button></div>
     {(kind === "login" || kind === "register" || kind === "forgot") && <><p className="modal-copy">{kind === "forgot" ? "Password recovery will be available when accounts launch." : "Accounts and matchmaking are coming soon. This form is a preview only."}</p><form onSubmit={submitAuth}>
       {kind === "register" && <label className="field"><span>Username</span><input name="username" placeholder="Your player name" required minLength={3} autoComplete="username" /></label>}
       <label className="field"><span>{kind === "login" ? "Email or username" : "Email"}</span><input name="email" type={kind === "login" ? "text" : "email"} placeholder={kind === "login" ? "Email or username" : "you@example.com"} required autoComplete="email" /></label>

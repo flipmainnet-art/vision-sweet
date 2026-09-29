@@ -77,9 +77,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "COIL" },
+      { title: "PumpGames.site" },
       { name: "description", content: "A competitive snake arena coming soon." },
-      { property: "og:title", content: "COIL" },
+      { property: "og:title", content: "PumpGames.site" },
       { property: "og:description", content: "A competitive snake arena coming soon." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
