@@ -1,0 +1,4 @@
+- [x] Build the responsive competitive snake landing page based on the uploaded reference.
+- [x] Add clearly labeled demo wallet and leaderboard with working preview dialogs.
+- [x] Add account-preview dialogs, how-to-play content, and footer links.
+- [ ] Connect secure accounts, persistent wallet records, live player counts, and gameplay when those services are commissioned.
