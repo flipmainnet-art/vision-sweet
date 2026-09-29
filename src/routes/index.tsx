@@ -51,6 +51,7 @@ function WalletPanel({ open }: { open: (modal: ModalKind) => void }) {
 function Hero({ open }: { open: (modal: ModalKind) => void }) {
   return <section className="arena" id="home" aria-label="Coil arena">
     <img className="arena-art" src={arenaArt} alt="Colorful snakes weaving through a dark arena filled with glowing orbs" width={1600} height={900} />
+    <div className="arena-sparks" aria-hidden="true"><span /><span /><span /><span /><span /></div>
     <div className="arena-inner"><div className="arena-intro"><span className="eyebrow"><span className="status-dot" /> The next competitive snake arena</span><h1>ENTER THE ARENA.</h1><p>Grow bigger. Outplay your rivals. Dominate the leaderboard.</p></div>
       <div className="arena-panels"><Leaderboard open={open} /><div className="panel play-panel"><div className="play-top"><Crosshair size={15} /> Ready to coil?</div><h2>Your next move starts here.</h2><p>One arena. Endless ways to win.</p><Button variant="primary" size="large" onClick={() => open("login")}><Play size={18} fill="currentColor" /> PLAY NOW <ArrowRight size={18} /></Button><div className="play-availability"><span className="status-dot" /> Available players: not yet live · Game coming soon</div></div><WalletPanel open={open} /></div>
     </div>
