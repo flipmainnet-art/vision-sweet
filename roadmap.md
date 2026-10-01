@@ -6,4 +6,5 @@
 - [x] Add subtle arena movement without distracting from the landing page or moving controls.
 - [x] Keep the arena presentation polished without suggesting unavailable counts or matches are live.
 - [x] Replace the wallet note “Virtual balance · No cash value” with “Balance”.
+- [ ] Restore the original top-left wordmark while keeping the uploaded snake favicon.
 - [ ] Connect secure accounts, persistent wallet records, live available-player counts, and gameplay. Blocked: there is no live player service or gameplay to count yet.

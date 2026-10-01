@@ -1,12 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState, type FormEvent } from "react";
-import { ArrowRight, Check, ChevronRight, Coins, Copy, Crosshair, History, Play, ShieldCheck, Trophy, Wallet, X } from "lucide-react";
+import { ArrowRight, Check, ChevronRight, Coins, Copy, Crosshair, History, Play, ShieldCheck, Trophy, Wallet, X, Zap } from "lucide-react";
 import { Button } from "../components/Button";
 import { supabase } from "@/integrations/supabase/client";
 import type { User } from "@supabase/supabase-js";
 import { ArenaSnakes } from "../components/ArenaSnakes";
 import arenaArt from "../assets/arena.jpg";
-import pumpgamesLogo from "../assets/pumpgames-logo.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -33,7 +32,7 @@ function Header({ open, user }: { open: (modal: ModalKind) => void; user: User |
   const name = (user?.user_metadata?.["username"] as string | undefined) ?? user?.email?.split("@")[0] ?? "";
   return <>
     <header className="site-header"><div className="header-inner">
-      <a href="#home" className="brand" aria-label="PumpGames.site home"><img src={pumpgamesLogo.url} alt="PumpGames" className="brand-logo" /></a>
+      <a href="#home" className="brand" aria-label="PumpGames.site home"><span className="brand-mark"><Zap size={21} strokeWidth={3} /></span><span>Pumpgames<span className="brand-dot">.site</span></span></a>
       <nav className="main-nav" aria-label="Main navigation"><a href="#home">Home</a><a href="#leaderboard">Leaderboard</a></nav>
       <div className="header-actions"><span className="online-pill" title="Player count is unavailable"><span className="status-dot" /> Players —</span>{user ? <><span className="player"><span className="player-avatar">{name.slice(0, 2).toUpperCase()}</span>{name}</span><Button variant="ghost" onClick={() => supabase.auth.signOut()}>Log out</Button></> : <><Button variant="ghost" className="login-button" onClick={() => open("login")}>Log in</Button><Button variant="primary" onClick={() => open("register")}>Register <ArrowRight size={14} /></Button></>}</div>
     </div></header>
