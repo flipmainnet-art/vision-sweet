@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 Landing page interaction remains frontend-only until an authenticated persistent service is introduced; this prevents demo UI from presenting invented balances, sessions, or match activity as real.
+Use the uploaded PumpGames snake as a local cropped raster favicon while retaining the original header wordmark; the tab icon stays legible without changing the site's header identity.

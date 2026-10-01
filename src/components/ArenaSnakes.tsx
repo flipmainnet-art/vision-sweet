@@ -47,7 +47,9 @@ export function ArenaSnakes() {
         if (s.trail.length > 110) s.trail.pop();
         for (let i = s.trail.length - 1; i >= 0; i -= 3) {
           const p = s.trail[i];
-          if (i > 0 && Math.abs(p.x - s.trail[i - 1].x) > 50) continue;
+          if (!p) continue;
+          const previous = s.trail[i - 1];
+          if (previous && Math.abs(p.x - previous.x) > 50) continue;
           ctx.globalAlpha = 0.55 * (1 - i / s.trail.length) + 0.15;
           ctx.fillStyle = s.color;
           ctx.beginPath(); ctx.arc(p.x, p.y, 10 - (i / s.trail.length) * 4, 0, Math.PI * 2); ctx.fill();
