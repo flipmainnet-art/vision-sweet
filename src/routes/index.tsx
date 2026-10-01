@@ -53,7 +53,7 @@ function Leaderboard({ open }: { open: (modal: ModalKind) => void }) {
 function WalletPanel({ open }: { open: (modal: ModalKind) => void }) {
   return <div className="panel wallet-panel">
     <div className="panel-heading"><h2><Wallet size={17} /> Wallet</h2></div>
-     <div className="wallet-balance-label">Available balance</div><div className="wallet-balance">$0.00</div><div className="wallet-note">Virtual balance · No cash value</div>
+     <div className="wallet-balance-label">Available balance</div><div className="wallet-balance">$0.00</div><div className="wallet-note">Balance</div>
     <div className="wallet-stats"><div><span>Total deposits</span><strong>$0.00</strong></div><div><span>Total withdrawals</span><strong>$0.00</strong></div></div>
     <div className="wallet-actions"><Button variant="primary" size="small" onClick={() => open("topup")}><Coins size={14} /> Top up</Button><Button variant="outline" size="small" onClick={() => open("withdraw")}>Withdraw</Button></div>
     <button className="panel-link" onClick={() => open("history")}>Transaction history <ChevronRight size={13} /></button>

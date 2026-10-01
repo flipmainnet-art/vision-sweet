@@ -5,4 +5,5 @@
 - [x] Display zero-dollar preview balances and reveal the supplied Solana address after a three-second loading state, with a clear warning that transfers cannot be credited.
 - [x] Add subtle arena movement without distracting from the landing page or moving controls.
 - [x] Keep the arena presentation polished without suggesting unavailable counts or matches are live.
+- [ ] Replace the wallet note “Virtual balance · No cash value” with “Balance”.
 - [ ] Connect secure accounts, persistent wallet records, live available-player counts, and gameplay. Blocked: there is no live player service or gameplay to count yet.
