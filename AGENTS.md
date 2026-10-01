@@ -10,3 +10,4 @@
 <!-- LOVABLE:END -->
 
 Landing page interaction remains frontend-only until an authenticated persistent service is introduced; this prevents demo UI from presenting invented balances, sessions, or match activity as real.
+Use the uploaded PumpGames artwork through its CDN asset pointer for the header and a local cropped raster for the favicon; this keeps the full logo lightweight in the repository and the tab icon legible.

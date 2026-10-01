@@ -55,10 +55,8 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 
 .site-header { position: relative; z-index: 10; height: 76px; border-bottom: 1px solid var(--border); background: var(--background); }
 .header-inner { max-width: 1440px; margin: auto; height: 100%; padding: 0 32px; display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items: center; gap: 24px; }
-.brand { display: inline-flex; align-items: center; gap: 10px; width: fit-content; color: var(--foreground); text-decoration: none; font-weight: 700; font-size: 23px; }
-.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 7px; background: var(--primary); color: var(--primary-foreground); transform: rotate(-8deg); }
-.brand-mark svg { transform: rotate(8deg); }
-.brand-dot { color: var(--primary); }
+.brand { display: inline-flex; align-items: center; width: fit-content; text-decoration: none; }
+.brand-logo { display: block; width: clamp(148px, 17vw, 220px); height: auto; aspect-ratio: 1020 / 500; object-fit: contain; }
 .main-nav, .header-actions { display: flex; align-items: center; gap: 30px; }
 .header-actions { justify-content: flex-end; gap: 10px; }
 .main-nav a, .mobile-nav a { color: var(--muted-foreground); text-decoration: none; font-size: 13px; font-weight: 700; transition: color .2s; white-space: nowrap; }
@@ -188,8 +186,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 @media (max-width: 760px) {
   .site-header { height: 64px; }
   .header-inner { padding: 0 18px; gap: 10px; }
-  .brand { font-size: 20px; }
-  .brand-mark { width: 30px; height: 30px; }
+  .brand-logo { width: clamp(130px, 37vw, 168px); }
   .online-pill, .header-actions .login-button { display: none; }
   .header-actions .ui-button { min-height: 32px; padding: 0 11px; }
    .mobile-nav { display: flex; align-items: center; gap: 22px; }
